@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Achieve It</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#faf8ff;--card:#fff;--ink:#241f4a;--mut:#6b6890;--p:#6d4aff;--p2:#8b5cf6;--soft:#efeaff;--line:#e6e0fa;--ok:#2e9e6b;--warn:#d9822b}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#14112a;--card:#1e1a40;--ink:#f1eeff;--mut:#a9a5cf;--soft:#2a2457;--line:#332d66;--p:#9b83ff}}
+:root[data-theme=dark]{--bg:#14112a;--card:#1e1a40;--ink:#f1eeff;--mut:#a9a5cf;--soft:#2a2457;--line:#332d66;--p:#9b83ff}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Georgia,"Iowan Old Style",serif}
+h1,h2,h3,button,input,select,textarea,nav{font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+h1{font-size:clamp(2rem,6vw,3.2rem);line-height:1.1;margin:.2em 0}h2{margin:0 0 .6rem}h3{margin:.2rem 0}
+.w{max-width:960px;margin:auto;padding:16px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0}
+.logo{font:700 1.3rem system-ui;color:var(--p)}.logo span{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;border-radius:9px;padding:1px 8px;margin-right:6px}
+nav{display:flex;gap:6px;overflow-x:auto;padding:6px 0 12px;scrollbar-width:none}
+nav button{white-space:nowrap;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:7px 14px;border-radius:99px;cursor:pointer;font-size:.9rem}
+nav button.on{background:var(--p);color:#fff;border-color:var(--p)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin:0 0 14px;box-shadow:0 2px 10px rgba(109,74,255,.06)}
+.g{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.hero{background:linear-gradient(135deg,var(--soft),var(--card));border-radius:24px;padding:28px 20px;margin:8px 0 16px;border:1px solid var(--line)}
+.btn{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;border:0;border-radius:12px;padding:10px 18px;font-size:.95rem;cursor:pointer}
+.btn.o{background:transparent;color:var(--p);border:1px solid var(--p)}.btn.s{padding:5px 10px;font-size:.8rem}
+input,select,textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font-size:.95rem;margin:3px 0 10px}
+input[type=checkbox]{width:auto;margin:0 8px 0 0}label{font:600 .85rem system-ui;color:var(--mut)}
+.n{font:700 1.9rem system-ui;color:var(--p)}.m{color:var(--mut);font-size:.88rem}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.sp{justify-content:space-between}
+.t{padding:9px 0;border-bottom:1px solid var(--line)}.t.d span.x{text-decoration:line-through;opacity:.55}
+.pill{background:var(--soft);color:var(--p);border-radius:99px;padding:2px 10px;font:600 .75rem system-ui}
+.av{display:inline-flex;font-size:1.4rem;width:40px;height:40px;border-radius:50%;background:var(--soft);align-items:center;justify-content:center;cursor:pointer;border:2px solid transparent}
+.av.on{border-color:var(--p)}.note{background:var(--soft);border-radius:12px;padding:10px 14px;font-size:.88rem}
+.clk{font:700 4rem system-ui;text-align:center;color:var(--p);letter-spacing:2px}
+.bar{height:8px;background:var(--soft);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--p),var(--p2))}
+body.zen nav,body.zen .top{display:none}
+#toast{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:12px;font:.9rem system-ui;display:none;z-index:9}
+.err{color:#d6336c;font:.85rem system-ui;min-height:1em}
+</style></head><body><div class="w" id="app"></div><div id="toast"></div>
+<script>
+var K='achieveit1',S=null;try{S=JSON.parse(localStorage.getItem(K))}catch(e){}
+S=S||{user:null,tasks:[],sess:[],cards:[],habits:[],weak:[],checks:{},plan:null,quiz:[],days:{},chat:[]};
+var V='home',eid=null,room=null,rev=null,show=false,qz=null,T={left:1500,run:false,mode:'focus',id:null,f:25,b:5,goal:'',res:0};
+function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
+var $=function(i){return document.getElementById(i)},esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+function dt(o){var d=new Date();d.setDate(d.getDate()+(o||0));return d.toISOString().slice(0,10)}
+function toast(m){var t=$('toast');t.textContent=m;t.style.display='block';setTimeout(function(){t.style.display='none'},2600)}
+function mark(){S.days[dt()]=1}
+function streak(){var n=0,o=S.days[dt()]?0:-1;while(S.days[dt(o)]){n++;o--}return n}
+function go(v){V=v;R()}
+var TECH=['Active recall','Feynman technique','Pomodoro technique','SQ3R','Flashcards','Blurting','Concept map'];
+var AVS=['🦊','🐼','🦉','🐙','🌱','🪐','🦋','🐳'];
+var ADV={boredom:['Short 15-minute sprints with a small reward after each.','Pomodoro technique + Flashcards',15],confusion:['Shrink the topic, then explain it in plain words.','Feynman technique + Concept map',25],distraction:['Phone out of reach, one goal, a timed block.','Pomodoro technique + Blurting',25],isolation:['Study beside others in a quiet room.','Co-study room + Active recall',30],motivation:['Start with a 5-minute task. Momentum follows.','Pomodoro technique + Active recall',10]};
+var QB=[['A spaced-repetition schedule works best when reviews are…','Spread out over increasing gaps','Crammed the night before','Done only once','a'],['In SQ3R, the first step is…','Survey','Recite','Review','a'],['The Feynman technique asks you to…','Explain the idea in simple words','Re-read notes','Highlight text','a'],['Active recall means…','Pulling answers from memory','Listening to music','Copying notes neatly','a']];
+
+function R(){var a=$('app');a.innerHTML=S.user?shell():landing();if(S.user&&V=='focus')tick(true)}
+function landing(){return '<div class="top"><div class="logo"><span>A</span>Achieve It</div><button class="btn o s" onclick="document.getElementById(\'reg\').scrollIntoView({behavior:\'smooth\'})">Log in</button></div>'+
+'<div class="hero"><span class="pill">From isolated doom-scrolling to high-accountability co-studying</span><h1>Stop scrolling. Start achieving.</h1><p class="m" style="font-size:1.05rem">Studying alone is lonely, your phone is loud, and habits slip. Achieve It breaks your syllabus into small chunks, keeps you company in quiet rooms, and brings back what you forgot.</p><button class="btn" onclick="document.getElementById(\'reg\').scrollIntoView({behavior:\'smooth\'})">Get started</button></div>'+
+'<div class="g">'+[['Focus Rooms','Camera-free co-study with a shared timer.'],['Study Coach','Chunks goals, quizzes you, finds weak spots.'],['Distraction Control','In-site focus screen and a distraction log.'],['Smart Revision','Flashcards on a spaced schedule.'],['Habit Builder','Tiny habits that shrink when life gets busy.']].map(function(f){return '<div class="card"><h3>'+f[0]+'</h3><div class="m">'+f[1]+'</div></div>'}).join('')+'</div>'+
+'<div class="card"><h2>How it works</h2><div class="row">'+['Create an anonymous profile','Set your goal','Get a plan','Focus, quiz, revise'].map(function(s,i){return '<span class="pill">'+(i+1)+'. '+s+'</span>'}).join('')+'</div></div>'+
+'<div class="card" id="reg"><h2>Create your anonymous profile</h2><div class="note">Demo mode: your data is saved only in this browser. No email or password is collected, and nothing is sent to a server.</div><br>'+
+'<label>Pick an avatar</label><div class="row" id="avs" style="margin:6px 0 10px">'+AVS.map(function(x,i){return '<span class="av'+(i?'':' on')+'" onclick="pickAv(this)">'+x+'</span>'}).join('')+'</div>'+
+'<label>Nickname</label><input id="nick" maxlength="20" placeholder="e.g. QuietFox">'+
+'<label>Study goal</label><input id="goal" placeholder="e.g. Finish Physics unit 3 by Friday">'+
+'<label>Subjects (comma separated)</label><input id="subs" placeholder="Physics, Maths">'+
+'<div class="g"><div><label>Biggest obstacle</label><select id="obs"><option value="boredom">Boredom</option><option value="confusion">Confusion</option><option value="distraction">Distraction</option><option value="isolation">Isolation</option><option value="motivation">Low motivation</option></select></div>'+
+'<div><label>Hours available per day</label><input id="hrs" type="number" min="0.5" max="12" step="0.5" value="2"></div>'+
+'<div><label>Session length</label><select id="len"><option>15</option><option selected>25</option><option>45</option><option>60</option></select></div>'+
+'<div><label>Target date (optional)</label><input id="tgt" type="date"></div></div>'+
+'<label>Study techniques (pick one or more)</label><div style="margin:6px 0 10px">'+TECH.map(function(t,i){return '<div><label><input type="checkbox" class="tk" value="'+t+'"'+(i==2?' checked':'')+'>'+t+'</label></div>'}).join('')+'</div>'+
+'<label>Study mode</label><select id="mode"><option>Private solo study</option><option>Virtual co-study</option><option>Both</option></select>'+
+'<label>Profile visibility</label><select id="vis"><option>Nickname and avatar only</option><option>Hidden from everyone</option></select>'+
+'<label><input type="checkbox" id="cons"> I understand my data stays in this browser in demo mode.</label><div class="err" id="err"></div><button class="btn" onclick="reg()">Create plan</button></div>'}
+function pickAv(e){document.querySelectorAll('.av').forEach(function(x){x.classList.remove('on')});e.classList.add('on')}
+function reg(){var n=$('nick').value.trim(),g=$('goal').value.trim(),s=$('subs').value.split(',').map(function(x){return x.trim()}).filter(Boolean),er='';
+if(n.length<2)er='Please choose a nickname with at least 2 characters.';else if(!g)er='Tell us your study goal so we can plan around it.';else if(!s.length)er='Add at least one subject.';else if(!$('cons').checked)er='Please tick the consent box to continue.';
+var tk=[].slice.call(document.querySelectorAll('.tk:checked')).map(function(x){return x.value});if(!er&&!tk.length)er='Choose at least one technique.';
+if(er){$('err').textContent=er;return}
+var len=+$('len').value,h=+$('hrs').value||1;
+S.user={nick:n,av:document.querySelector('.av.on').textContent,goal:g,subs:s,obs:$('obs').value,hrs:h,len:len,tgt:$('tgt').value,tech:tk,mode:$('mode').value,vis:$('vis').value};
+var plan=[];s.forEach(function(x){['Survey and chunk','Core concepts','Practice and recall','Review mistakes'].forEach(function(c){plan.push({t:x+': '+c,m:len})})});
+S.plan={items:plan,total:plan.length*len};T.f=len;T.left=len*60;save();toast('Plan ready. Welcome, '+n+'!');go('home')}
+function shell(){var v={home:home,coach:coach,study:study,focus:focus,cards:cards,rooms:rooms,habits:habits,prog:prog}[V]();
+return '<div class="top"><div class="logo"><span>A</span>Achieve It</div><div class="row"><span class="pill">Demo mode</span><span class="av" style="cursor:default">'+S.user.av+'</span><button class="btn o s" onclick="out()">Log out</button></div></div><nav>'+
+[['home','Home'],['coach','Coach'],['study','Study steps'],['focus','Focus'],['cards','Flashcards'],['rooms','Co-study'],['habits','Habits'],['prog','Progress']].map(function(x){return '<button class="'+(V==x[0]?'on':'')+'" onclick="go(\''+x[0]+'\')">'+x[1]+'</button>'}).join('')+'</nav>'+v}
+function out(){if(confirm('Log out? Your data stays saved in this browser. Choose Cancel to stay.')){S.user=null;save();R()}}
+function dueCards(){return S.cards.filter(function(c){return c.due<=dt()})}
+function home(){var td=dt(),tk=S.tasks.filter(function(t){return t.due==td||!t.due}),dn=tk.filter(function(t){return t.done}).length,fm=S.sess.filter(function(s){return s.date==td}).reduce(function(a,s){return a+s.min},0),e=S.tasks.find(function(t){return t.id==eid});
+var miss=!S.days[td]&&!S.days[dt(-1)]&&S.sess.length+S.tasks.length>0;
+return '<h2>Hi '+esc(S.user.nick)+', today’s goal: '+esc(S.user.goal)+'</h2>'+
+(miss?'<div class="note">Missed a few days? That’s fine. Restart with one small task. <button class="btn s" onclick="restart()">Add a 10-minute task</button></div><br>':'')+
+'<div class="g"><div class="card"><div class="n">'+fm+'</div><div class="m">focus minutes today</div></div><div class="card"><div class="n">'+dn+'/'+tk.length+'</div><div class="m">tasks done today</div></div><div class="card"><div class="n">'+streak()+'</div><div class="m">day consistency streak</div></div><div class="card"><div class="n">'+(dueCards().length+S.weak.filter(function(w){return w.due<=td}).length)+'</div><div class="m">revisions due</div></div></div>'+
+'<div class="card"><h3>Your study plan</h3><div class="m">About '+(S.plan.total/60).toFixed(1)+' hours across '+S.plan.items.length+' sessions'+(S.user.tgt?' before '+esc(S.user.tgt):'')+', at '+S.user.hrs+' h/day.</div><div style="margin:8px 0">'+S.plan.items.map(function(p,i){return '<span class="pill" style="display:inline-block;margin:2px">'+esc(p.t)+' · '+p.m+'m</span>'}).join('')+'</div><button class="btn s" onclick="plan2tasks()">Add plan to my tasks</button></div>'+
+'<div class="card"><h3>Tasks</h3><div class="row"><input id="tt" style="flex:2;min-width:160px" placeholder="Add a task" value="'+(e?esc(e.t):'')+'"><select id="tp" style="flex:1;min-width:90px"><option>High</option><option selected>Medium</option><option>Low</option></select><input id="td" type="date" style="flex:1;min-width:130px" value="'+(e?e.due:td)+'"></div><button class="btn s" onclick="saveTask()">'+(e?'Save changes':'Add task')+'</button><div class="err" id="terr"></div>'+
+(S.tasks.length?S.tasks.map(function(t){return '<div class="t row sp'+(t.done?' d':'')+'"><label style="font-size:1rem;color:inherit"><input type="checkbox" '+(t.done?'checked':'')+' onchange="tog('+t.id+')"><span class="x">'+esc(t.t)+'</span></label><span class="row"><span class="pill">'+t.p+'</span><span class="m">'+(t.due||'')+'</span><button class="btn o s" onclick="eid='+t.id+';R()">Edit</button><button class="btn o s" onclick="del('+t.id+')">Delete</button></span></div>'}).join(''):'<p class="m">No tasks yet. Add one above or import your plan.</p>')+'</div>'+
+'<div class="card"><h3>Plan tomorrow</h3>'+S.tasks.filter(function(t){return !t.done}).map(function(t){return '<div><label><input type="checkbox" class="co" value="'+t.id+'">Carry over: '+esc(t.t)+'</label></div>'}).join('')+'<input id="nt" placeholder="New task for tomorrow (optional)"><input id="nm" type="number" placeholder="Minutes to allocate" value="25"><button class="btn s" onclick="planTom()">Schedule for tomorrow</button></div>'+
+'<div class="card"><h3>This week</h3><div class="m">'+wk()+'</div></div>'}
+function wk(){var m=0,c=0;for(var i=0;i<7;i++){S.sess.forEach(function(s){if(s.date==dt(-i))m+=s.min});S.tasks.forEach(function(t){if(t.done&&t.dd==dt(-i))c++})}return m+' focus minutes, '+c+' tasks completed, '+Object.keys(S.days).filter(function(d){return d>=dt(-6)}).length+' active days in the last 7.'}
+function saveTask(){var t=$('tt').value.trim();if(!t){$('terr').textContent='Give the task a short name first.';return}
+if(eid){var x=S.tasks.find(function(a){return a.id==eid});x.t=t;x.p=$('tp').value;x.due=$('td').value;eid=null}else S.tasks.push({id:Date.now(),t:t,p:$('tp').value,due:$('td').value,done:false});save();R()}
+function tog(id){var t=S.tasks.find(function(a){return a.id==id});t.done=!t.done;t.dd=t.done?dt():null;if(t.done)mark();save();R()}
+function del(id){S.tasks=S.tasks.filter(function(t){return t.id!=id});save();R()}
+function plan2tasks(){S.plan.items.forEach(function(p,i){S.tasks.push({id:Date.now()+i,t:p.t+' ('+p.m+'m)',p:'Medium',due:dt(),done:false})});save();toast('Plan added to tasks');R()}
+function restart(){S.tasks.push({id:Date.now(),t:'Fresh start: 10 minutes on '+S.user.subs[0],p:'High',due:dt(),done:false});save();R()}
+function planTom(){document.querySelectorAll('.co:checked').forEach(function(c){S.tasks.find(function(t){return t.id==c.value}).due=dt(1)});var n=$('nt').value.trim();if(n)S.tasks.push({id:Date.now(),t:n+' ('+($('nm').value||25)+'m)',p:'Medium',due:dt(1),done:false});save();toast('Tomorrow is planned');R()}
+
+function coach(){var o=ADV[S.user.obs];
+return '<div class="card"><h2>Study Coach</h2><div class="note">Rule-based demo. No AI model is connected, and the sample questions below are not generated by AI or guaranteed accurate.</div><br><label>What do you want to achieve this session?</label><input id="cg" placeholder="e.g. Understand Newton’s laws"><label>Your obstacle</label><select id="co" onchange="S.user.obs=this.value;save();R()">'+Object.keys(ADV).map(function(k){return '<option value="'+k+'"'+(k==S.user.obs?' selected':'')+'>'+k+'</option>'}).join('')+'</select>'+
+'<div class="card" style="background:var(--soft)"><b>Suggestion:</b> '+o[0]+'<br><span class="m">Try '+o[1]+' for about '+o[2]+' minutes.</span></div><button class="btn s" onclick="chunk()">Break goal into small tasks</button></div>'+
+'<div class="card"><h3>Knowledge check</h3>'+(qz?quizUI():'<p class="m">Take a short check before you study, and again afterwards, to compare.</p><button class="btn s" onclick="startQ(\'Pre-study\')">Pre-study check</button> <button class="btn s" onclick="startQ(\'Post-session\')">Post-session quiz</button>')+
+S.quiz.slice(-4).reverse().map(function(q){return '<div class="t m">'+q.date+' · '+q.kind+': '+q.score+'/'+q.n+'</div>'}).join('')+'</div>'+
+'<div class="card"><h3>Weak concepts</h3>'+(S.weak.length?S.weak.map(function(w){return '<div class="t row sp"><span>'+esc(w.c)+'</span><span class="pill">revise '+w.due+'</span></div>'}).join(''):'<p class="m">None yet. Wrong quiz answers land here and get a revision date.</p>')+'</div>'}
+function chunk(){var g=$('cg').value.trim();if(!g){toast('Type a session goal first');return}['Skim and list key terms for ','Learn the first half of ','Practise questions on ','Quick recall of '].forEach(function(s,i){S.tasks.push({id:Date.now()+i,t:s+g,p:'Medium',due:dt(),done:false})});save();toast('4 small tasks added');go('home')}
+function startQ(k){qz={k:k,i:0,s:0,w:[]};R()}
+function quizUI(){var q=QB[qz.i];return '<b>'+qz.k+' · Question '+(qz.i+1)+' of '+QB.length+'</b><p>'+q[0]+'</p>'+[1,2,3].map(function(i){return '<button class="btn o s" style="display:block;margin:6px 0" onclick="ans('+i+')">'+q[i]+'</button>'}).join('')}
+function ans(i){var q=QB[qz.i];if(i==1)qz.s++;else qz.w.push(q[0].split('…')[0].trim());qz.i++;if(qz.i>=QB.length){S.quiz.push({date:dt(),kind:qz.k,score:qz.s,n:QB.length});qz.w.forEach(function(c){S.weak.push({c:c,due:dt(2)})});mark();save();toast('Score: '+qz.s+'/'+QB.length);qz=null}R()}
+
+var STEPS=[['Chunk the topic','Split it into 3–5 small sections.'],['SQ3R','Survey, Question, Read, Recite, Review one section.'],['Feynman','Explain it aloud as if teaching a friend. Note the gaps.'],['Active recall','Close your notes and write what you remember.'],['Mind map','Draw the ideas and connect them with labelled lines.'],['Flashcards','Turn tricky facts into cards in the Flashcards tab.'],['Spaced repetition','Review after 1, 3, 7, 14 days.']];
+function study(){var c=S.checks,d=STEPS.filter(function(s,i){return c['s'+i]}).length;
+return '<div class="card"><h2>Seven-step study workflow</h2><div class="m">Your chosen techniques: '+S.user.tech.map(function(t){return '<span class="pill">'+t+'</span>'}).join(' ')+'</div><div class="bar" style="margin:12px 0"><i style="width:'+d/7*100+'%"></i></div><div class="m">'+d+' of 7 steps done</div></div>'+
+STEPS.map(function(s,i){return '<div class="card"><label style="font-size:1rem;color:inherit"><input type="checkbox" '+(c['s'+i]?'checked':'')+' onchange="S.checks[\'s'+i+'\']=this.checked;if(this.checked)mark();save();R()"><b>Step '+(i+1)+': '+s[0]+'</b></label><div class="m">'+s[1]+'</div></div>'}).join('')+'<button class="btn o s" onclick="S.checks={};save();R()">Reset steps</button>'}
+
+function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function tick(draw){if(draw===true){var e=$('clk');if(e)e.textContent=fmt(T.left);return}
+if(!T.run)return;T.left--;if(T.left<=0){if(T.mode=='focus'){S.sess.push({date:dt(),min:T.f,goal:T.goal,res:T.res,ref:($('ref')||{}).value||''});mark();save();toast('Focus block done. Take a break!');T.mode='break';T.left=T.b*60}else{T.mode='focus';T.left=T.f*60;toast('Break over')}}
+var e=$('clk');if(e)e.textContent=fmt(T.left);var l=$('lab');if(l)l.textContent=T.mode=='focus'?'Focus':'Break'}
+function tg(){if(T.run){clearInterval(T.id);T.run=false}else{T.goal=($('sg')||{}).value||T.goal;T.run=true;T.id=setInterval(tick,1000)}R()}
+function rs(){clearInterval(T.id);T.run=false;T.mode='focus';T.left=T.f*60;R()}
+function cfg(){T.f=Math.max(1,+$('fm').value||25);T.b=Math.max(1,+$('bm').value||5);if(!T.run){T.left=T.f*60;T.mode='focus'}R()}
+function focus(){return '<div class="card"><h2>Focus timer</h2><div class="m" id="lab">'+(T.mode=='focus'?'Focus':'Break')+'</div><div class="clk" id="clk">'+fmt(T.left)+'</div>'+
+'<label>Session goal</label><input id="sg" value="'+esc(T.goal)+'" placeholder="What will you finish in this block?"><div class="row"><div style="flex:1"><label>Focus (min)</label><input id="fm" type="number" value="'+T.f+'" onchange="cfg()"></div><div style="flex:1"><label>Break (min)</label><input id="bm" type="number" value="'+T.b+'" onchange="cfg()"></div></div>'+
+'<div class="row"><button class="btn" onclick="tg()">'+(T.run?'Pause':(T.left<T.f*60?'Resume':'Start'))+'</button><button class="btn o" onclick="rs()">Reset</button><button class="btn o" onclick="document.body.classList.toggle(\'zen\')">Distraction-free screen</button></div></div>'+
+'<div class="card"><h3>Focus checklist and reflection</h3>'+['Phone face down or in another room','Water and notes ready','One goal written above'].map(function(x){return '<div><label><input type="checkbox">'+x+'</label></div>'}).join('')+'<label>Post-session reflection</label><textarea id="ref" rows="2" placeholder="What went well? What pulled you away?"></textarea><button class="btn s" onclick="T.res++;toast(\'Distraction resisted: \'+T.res)">I resisted a distraction (+1)</button> <span class="m">This block: '+T.res+'</span></div>'+
+'<div class="note"><b>Honest note:</b> a website can’t block other apps or sites across your device. This version offers an in-site focus screen and a distraction log only. A browser extension with explicit permissions and an emergency override is planned, not built.</div><br>'+
+'<div class="card"><h3>Session history</h3>'+(S.sess.length?S.sess.slice(-6).reverse().map(function(s){return '<div class="t m">'+s.date+' · '+s.min+' min · '+esc(s.goal||'No goal set')+' · resisted '+s.res+'</div>'}).join(''):'<p class="m">No sessions yet. Your first one will show up here.</p>')+'</div>'}
+
+function cards(){var d=dueCards(),c=d[0];
+return '<div class="card"><h2>Flashcards</h2><div class="m">'+S.cards.length+' cards · '+d.length+' due today</div>'+
+(c?'<div class="card" style="background:var(--soft);text-align:center;margin-top:12px"><h3>'+esc(c.f)+'</h3>'+(show?'<p>'+esc(c.b)+'</p><button class="btn s" onclick="rate(0)">Again</button> <button class="btn s" onclick="rate(1)">Got it</button>':'<button class="btn s" onclick="show=true;R()">Show answer</button>')+'</div>':'<p class="m">Nothing due. Add cards below or come back tomorrow.</p>')+'</div>'+
+'<div class="card"><h3>Add a card</h3><input id="cf" placeholder="Front (question)"><input id="cb" placeholder="Back (answer)"><button class="btn s" onclick="addC()">Add card</button><div class="m" style="margin-top:8px">Schedule: reviews step through 1, 3, 7, 14 and 30 days. “Again” resets to 1 day.</div></div>'}
+function addC(){var f=$('cf').value.trim(),b=$('cb').value.trim();if(!f||!b){toast('Fill both sides of the card');return}S.cards.push({f:f,b:b,lvl:0,due:dt()});save();R()}
+function rate(g){var c=dueCards()[0],L=[1,3,7,14,30];c.lvl=g?Math.min(c.lvl+1,4):0;c.due=dt(L[c.lvl]);show=false;mark();save();R()}
+
+var ROOMS=[{id:1,n:'Quiet Library Hour',t:'Public · text only'},{id:2,n:'Maths Sprint',t:'Public · text only'}];
+function rooms(){if(room)return roomUI();
+return '<div class="card"><h2>Co-study rooms</h2><div class="note">Demo mode: rooms are simulated in this browser, and the other students shown are sample placeholders. Real shared rooms need the Supabase Realtime backend, which isn’t connected here.</div></div><div class="g">'+ROOMS.concat(S.user.rooms||[]).map(function(r){return '<div class="card"><h3>'+esc(r.n)+'</h3><div class="m">'+r.t+'</div><br><button class="btn s" onclick="room='+r.id+';R()">Join</button></div>'}).join('')+'</div>'+
+'<div class="card"><h3>Create a private room</h3><input id="rn" placeholder="Room name"><button class="btn s" onclick="mkRoom()">Create</button></div>'}
+function mkRoom(){var n=$('rn').value.trim();if(!n){toast('Name your room');return}S.user.rooms=(S.user.rooms||[]).concat([{id:Date.now(),n:n,t:'Private · invite only'}]);save();R()}
+function roomUI(){var r=ROOMS.concat(S.user.rooms||[]).find(function(x){return x.id==room});
+return '<div class="card"><div class="row sp"><h2>'+esc(r.n)+'</h2><button class="btn o s" onclick="room=null;R()">Leave room</button></div><span class="pill">Camera off</span> <span class="pill">Mic off</span> <span class="pill">Nickname only</span><div class="clk" id="clk">'+fmt(T.left)+'</div><div class="row"><button class="btn s" onclick="tg()">'+(T.run?'Pause shared timer':'Start shared timer')+'</button></div></div>'+
+'<div class="card"><h3>In the room</h3><div class="row"><span class="av">'+S.user.av+'</span>'+esc(S.user.nick)+' (you)<span class="av">🦉</span>Sample peer<span class="av">🌱</span>Sample peer</div><div class="row" style="margin-top:8px"><button class="btn o s" onclick="toast(\'Blocked (demo)\')">Block</button><button class="btn o s" onclick="toast(\'Report sent (demo)\')">Report</button></div></div>'+
+'<div class="card"><h3>Check-in and explain-to-a-partner</h3><div class="m">Pair prompt: explain one concept in 60 seconds, then swap. Set a shared goal and review at the end.</div><input id="rg" placeholder="Shared practice goal"><button class="btn s" onclick="S.chat.push(\'Goal: \'+$(\'rg\').value);save();R()">Set goal</button><div style="margin-top:8px">'+S.chat.slice(-5).map(function(c){return '<div class="t m">'+esc(c)+'</div>'}).join('')+'</div><div class="row"><button class="btn o s" onclick="S.chat.push(\'Check-in: on track\');save();R()">On track</button><button class="btn o s" onclick="S.chat.push(\'Check-in: need a break\');save();R()">Need a break</button></div></div>'}
+
+function habits(){return '<div class="card"><h2>Habit builder</h2><input id="hn" placeholder="Tiny habit, e.g. Review 5 flashcards"><input id="ha" placeholder="After I… (existing routine, e.g. morning tea)"><label>Daily target (minutes)</label><input id="hm" type="number" value="10"><button class="btn s" onclick="addH()">Add habit</button></div>'+
+(S.habits.length?S.habits.map(function(h,i){var done=(h.log||[]).indexOf(dt())>-1,last=(h.log||[]).length&&!done&&(h.log||[]).indexOf(dt(-1))<0;
+return '<div class="card"><div class="row sp"><div><b>'+esc(h.n)+'</b><div class="m">After '+esc(h.a||'my routine')+' · '+h.m+' min · '+(h.log||[]).length+' days done</div></div><button class="btn'+(done?' o':'')+' s" onclick="hl('+i+')">'+(done?'Done today ✓':'Mark done')+'</button></div>'+(last?'<div class="note" style="margin-top:8px">No guilt. Missing days happens. Try a smaller version today. <button class="btn s" onclick="shrink('+i+')">Halve the goal</button></div>':'')+'</div>'}).join(''):'<div class="card m">No habits yet. Start with something so small it feels easy.</div>')+
+'<div class="card"><h3>Weekly reflection</h3><textarea id="wr" rows="2" placeholder="What helped? What will you change?">'+esc(S.refl||'')+'</textarea><button class="btn s" onclick="S.refl=$(\'wr\').value;save();toast(\'Saved\')">Save reflection</button></div>'}
+function addH(){var n=$('hn').value.trim();if(!n){toast('Name your habit');return}S.habits.push({n:n,a:$('ha').value.trim(),m:+$('hm').value||10,log:[]});save();R()}
+function hl(i){var h=S.habits[i],k=(h.log=h.log||[]).indexOf(dt());if(k>-1)h.log.splice(k,1);else{h.log.push(dt());mark()}save();R()}
+function shrink(i){S.habits[i].m=Math.max(2,Math.round(S.habits[i].m/2));save();R()}
+
+function prog(){var days=[],mx=1;for(var i=6;i>=0;i--){var m=S.sess.filter(function(s){return s.date==dt(-i)}).reduce(function(a,s){return a+s.min},0);days.push([dt(-i).slice(5),m]);mx=Math.max(mx,m)}
+var q=S.quiz.length?Math.round(S.quiz.reduce(function(a,x){return a+x.score/x.n},0)/S.quiz.length*100)+'%':'–';
+var svg='<svg viewBox="0 0 320 130" width="100%" role="img" aria-label="Focus minutes, last 7 days">'+days.map(function(d,i){var h=d[1]/mx*90;return '<rect x="'+(i*45+8)+'" y="'+(100-h)+'" width="30" height="'+h+'" rx="6" fill="#8b5cf6"/><text x="'+(i*45+23)+'" y="118" font-size="10" text-anchor="middle" fill="currentColor">'+d[0]+'</text><text x="'+(i*45+23)+'" y="'+(96-h)+'" font-size="9" text-anchor="middle" fill="currentColor">'+(d[1]||'')+'</text>'}).join('')+'</svg>';
+var sum='Achieve It summary for '+S.user.nick+'\nGoal: '+S.user.goal+'\nFocus minutes: '+S.sess.reduce(function(a,s){return a+s.min},0)+'\nSessions: '+S.sess.length+'\nTasks done: '+S.tasks.filter(function(t){return t.done}).length+'\nQuiz average: '+q+'\nWeak concepts: '+(S.weak.map(function(w){return w.c}).join('; ')||'none')+'\nStreak: '+streak()+' days';
+return '<div class="card"><h2>Progress</h2><div class="m">Every number here comes from what you actually did in this browser.</div></div><div class="g"><div class="card"><div class="n">'+S.sess.reduce(function(a,s){return a+s.min},0)+'</div><div class="m">total focus minutes</div></div><div class="card"><div class="n">'+S.tasks.filter(function(t){return t.done}).length+'</div><div class="m">tasks completed</div></div><div class="card"><div class="n">'+q+'</div><div class="m">average quiz score</div></div><div class="card"><div class="n">'+S.cards.length+'</div><div class="m">flashcards ('+dueCards().length+' due)</div></div></div>'+
+'<div class="card"><h3>Focus minutes, last 7 days</h3>'+(S.sess.length?svg:'<p class="m">Finish a focus block to see your chart.</p>')+'</div><div class="card"><h3>Weekly report</h3><div class="m">'+wk()+'</div></div>'+
+'<div class="card"><h3>Your study summary</h3><div class="m">Private to you. Copy it to keep or share on your own terms.</div><textarea rows="8" readonly>'+esc(sum)+'</textarea></div>'}
+R();
+</script></body></html>
